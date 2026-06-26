@@ -2,7 +2,7 @@
 
 AI-powered intelligence over the [CFPB Consumer Complaint Database](https://www.consumerfinance.gov/data-research/consumer-complaints/).
 
-**Live demo:** https://complaint-copilot1.streamlit.app
+**Live demo:** https://complaint-copilot2.streamlit.app
 
 ---
 
