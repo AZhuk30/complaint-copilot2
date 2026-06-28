@@ -80,7 +80,7 @@ with st.sidebar:
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 st.title("🔍 Complaint Copilot")
-st.caption("AI-powered intelligence over the CFPB Consumer Complaint Database")
+st.caption("Semantic search over the CFPB Consumer Complaint Database")
 
 # Metrics row
 col1, col2, col3, col4 = st.columns(4)
@@ -111,26 +111,26 @@ for i, (col, ex) in enumerate(zip(cols, examples)):
 query = st.text_input("Or type your own question:", value=query, placeholder="e.g. What are the biggest issues with credit reporting?")
 
 if query:
-    with st.spinner("Retrieving and analyzing..."):
+    with st.spinner("Searching complaints..."):
         retrieved = retrieve(query, top_k=top_k, product_filter=product_filter)
-        context = "\n\n".join([
-            f"[{i+1}] Product: {row['product']} | Company: {row['company']} | Issue: {row['issue']}\n{str(row[NARRATIVE_COL])[:600]}"
-            for i, (_, row) in enumerate(retrieved.iterrows())
-        ])
-        answer_text = llm_answer(query, context)
 
-    st.markdown("### 💡 Answer")
-    st.info(answer_text)
+    if len(retrieved) == 0:
+        st.warning("No matching complaints found. Try rephrasing your question.")
+    else:
+        top_products = ", ".join(retrieved["product"].value_counts().head(3).index.tolist())
+        st.markdown("### 💡 Summary")
+        st.info(f"Found {len(retrieved)} complaints most similar to your question. "
+                f"They mostly involve: {top_products}. See the matching complaints below.")
 
-    st.markdown(f"### 📄 Source Complaints ({len(retrieved)} retrieved)")
-    for i, (_, row) in enumerate(retrieved.iterrows()):
-        with st.expander(f"[{i+1}] {row['company']} — {row['product']} — {row['issue']} (similarity: {row['similarity']:.2f})"):
-            col1, col2, col3 = st.columns(3)
-            col1.markdown(f"**State:** {row.get('state','N/A')}")
-            col2.markdown(f"**Response:** {row.get('company_response','N/A')}")
-            col3.markdown(f"**Timely:** {row.get('timely','N/A')}")
-            st.markdown("**Narrative:**")
-            st.write(str(row[NARRATIVE_COL])[:1000])
+        st.markdown(f"### 📄 Source Complaints ({len(retrieved)} retrieved)")
+        for i, (_, row) in enumerate(retrieved.iterrows()):
+            with st.expander(f"[{i+1}] {row['company']} — {row['product']} — {row['issue']} (similarity: {row['similarity']:.2f})"):
+                col1, col2, col3 = st.columns(3)
+                col1.markdown(f"**State:** {row.get('state','N/A')}")
+                col2.markdown(f"**Response:** {row.get('company_response','N/A')}")
+                col3.markdown(f"**Timely:** {row.get('timely','N/A')}")
+                st.markdown("**Narrative:**")
+                st.write(str(row[NARRATIVE_COL])[:1000])
 
 st.divider()
 
