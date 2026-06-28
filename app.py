@@ -90,7 +90,6 @@ def llm_answer(query: str, context: str) -> str:
 with st.sidebar:
     st.title("🔍 Complaint Copilot")
     st.caption(f"**{len(df):,}** complaints loaded")
-    st.caption(f"LLM: {'✅ On' if USE_LLM else '⚠️ Off (set ANTHROPIC_API_KEY)'}")
     st.divider()
     product_filter = st.selectbox(
         "Filter by product",
