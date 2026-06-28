@@ -2,7 +2,7 @@
 
 AI-powered intelligence over the [CFPB Consumer Complaint Database](https://www.consumerfinance.gov/data-research/consumer-complaints/).
 
-**Live demo:** https://complaint-copilot2.streamlit.app
+**Live demo:** https://complaint-intelligence.streamlit.app
 
 ---
 
@@ -10,7 +10,7 @@ AI-powered intelligence over the [CFPB Consumer Complaint Database](https://www.
 
 - Ingests 10,000 real consumer complaints daily from the CFPB public API
 - Embeds narratives using `sentence-transformers` for semantic search
-- Answers natural-language questions over the complaint corpus via RAG (Claude API)
+- Answers natural-language questions over the complaint corpus via RAG 
 - Surfaces top products, issues, and companies in an interactive dashboard
 
 ---
@@ -24,7 +24,7 @@ data/complaints.parquet
     ↓  02_copilot_rag.py
 Embeddings (all-MiniLM-L6-v2)
     ↓
-RAG query engine (Anthropic Claude)
+RAG query engine 
     ↓
 Streamlit dashboard
 ```
@@ -47,8 +47,7 @@ python ingest.py --rows 10000
 # Generate embeddings + test RAG
 python 02_copilot_rag.py
 
-# Launch dashboard (optional: set API key for LLM answers)
-export ANTHROPIC_API_KEY=sk-ant-...
+
 streamlit run app.py
 ```
 
@@ -71,6 +70,6 @@ Updated daily. 4M+ complaints. No API key required.
 | Data source | CFPB public API |
 | Storage | Parquet |
 | Embeddings | sentence-transformers (all-MiniLM-L6-v2) |
-| RAG | Anthropic Claude API |
+| RAG |
 | Dashboard | Streamlit |
 | Language | Python 3.10+ |
