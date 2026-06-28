@@ -21,7 +21,6 @@ st.set_page_config(
 
 DATA_DIR = Path("data")
 NARRATIVE_COL = "consumer_complaint_narrative"
-USE_LLM = bool(os.environ.get("ANTHROPIC_API_KEY"))
 
 # ── Load data & embeddings ────────────────────────────────────────────────────
 @st.cache_resource
@@ -67,24 +66,6 @@ def retrieve(query: str, top_k: int = 5, product_filter=None) -> pd.DataFrame:
     results["similarity"] = scores[top_idx]
     return results[results["similarity"] > 0]
 
-def llm_answer(query: str, context: str) -> str:
-    if not USE_LLM:
-        return "Set ANTHROPIC_API_KEY to enable AI-synthesized answers."
-    import anthropic
-    client = anthropic.Anthropic()
-    resp = client.messages.create(
-        model="claude-sonnet-4-6",
-        max_tokens=512,
-        messages=[{
-            "role": "user",
-            "content": (
-                f"You are a consumer complaint analyst. Answer using ONLY the complaints "
-                f"below. Be concise, cite [1][2] etc, highlight patterns.\n\n"
-                f"Complaints:\n{context}\n\nQuestion: {query}"
-            )
-        }]
-    )
-    return resp.content[0].text
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
