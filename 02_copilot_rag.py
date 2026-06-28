@@ -1,6 +1,6 @@
 """
 02_copilot_rag.py — RAG query engine over CFPB complaints.
-Run after ingest.py. Works with or without ANTHROPIC_API_KEY.
+Run after ingest.py. 
 """
 
 import os
